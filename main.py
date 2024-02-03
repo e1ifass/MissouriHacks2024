@@ -1,4 +1,3 @@
-# Example file showing a circle moving on screen with random dots, a counter, background color change, and title
 import pygame
 import random
 
@@ -8,30 +7,30 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 font = pygame.font.Font(None, 36)
 
+# Initialize variables
 running = True
 dt = 0
 dots_eaten = 0
 screen_fill_points = 0
 current_dot_amount = 0
 
+# Initial size of the ball
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
-player_radius = 40  # Initial size of the ball
+player_radius = 40  
 
 # Generate dots with closer proximity
 dots = [pygame.Vector2(random.randint(100, screen.get_width() - 100), random.randint(100, screen.get_height() - 100)) for _ in range(15)]
 
-# Generate smaller black dots
+# Generate dangerous black dots
 small_dots = [pygame.Vector2(random.randint(0, screen.get_width()), random.randint(0, screen.get_height())) for _ in range(5)]
 
-# Define colors for circle and background
+# Colors for circle and background
 circle_colors = ["red", "green", "blue", "yellow", "purple", "orange", "pink", "cyan", "brown", "white"]
 background_colors = ["blue", "darkorange", "darkmagenta", "darkgreen", "darkred", "black", "darkviolet", "darkcyan", "darkgoldenrod", "black"]
 current_color_index = 0
 
 
 while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -44,12 +43,12 @@ while running:
         dots[i].x += random.uniform(-1, 1) * 100 * dt
         dots[i].y += random.uniform(-1, 1) * 100 * dt
 
-    # Move the small black dots
+    # Move the black dots
     for i in range(len(small_dots)):
         small_dots[i].x += random.uniform(-1, 1) * 150 * dt
         small_dots[i].y += random.uniform(-1, 1) * 150 * dt
 
-        # Draw the small black dots
+        # Draw the black dots
         pygame.draw.circle(screen, "black", (int(small_dots[i].x), int(small_dots[i].y)), 3)
 
         # Check for collisions with the main ball and reset its size
@@ -69,7 +68,7 @@ while running:
             dots_eaten += 1
             current_dot_amount += 1
 
-            # Grow the ball slightly when eating a dot
+            # Grow the ball when eating a dot
             player_radius += 3
 
             # Check if the ball dot amt reaches the target
@@ -78,7 +77,7 @@ while running:
                 current_dot_amount = 0
                 player_radius = 40
 
-            # Change colors every 10 dots eaten
+            # Change colors every 10 dots
             if dots_eaten % 10 == 0:
                 current_color_index = (current_color_index + 1) % len(circle_colors)
 
@@ -93,6 +92,8 @@ while running:
     counter_text = font.render(f"Dots Eaten: {dots_eaten}", True, (255, 255, 255))
     screen.blit(counter_text, (screen.get_width() - counter_text.get_width() - 10, 10))
 
+    # Draw the ball dot amt
+    
     counter_text = font.render(f"Ball Dot Amount: {current_dot_amount}", True, (255, 255, 255))
     screen.blit(counter_text, (screen.get_width() - counter_text.get_width() - 10, 50))
 
@@ -121,12 +122,10 @@ while running:
     if keys[pygame.K_d]:
         player_pos.x += 300 * dt
 
-    # flip() the display to put your work on screen
+    # flip() on screen
     pygame.display.flip()
 
     # limits FPS to 60
-    # dt is delta time in seconds since the last frame, used for framerate-
-    # independent physics.
     dt = clock.tick(60) / 1000
 
 pygame.quit()
